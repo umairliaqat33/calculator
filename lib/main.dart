@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
 import 'textfile.dart';
@@ -67,11 +66,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
-  Widget customOutLineButton(String value, int color,double h) {
+  Widget customOutLineButton(String value, int color, double h) {
     return Expanded(
       child: Container(
-        margin: EdgeInsets.all(h/100),
-        height: h/10,
+        margin: EdgeInsets.all(h / 100),
+        height: h / 10,
         width: 80,
         child: TextButton(
             onPressed: () {
@@ -81,8 +80,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               backgroundColor: MaterialStateProperty.all(Color(color)),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  )),
+                borderRadius: BorderRadius.circular(20),
+              )),
             ),
             child: Text(
               value,
@@ -95,7 +94,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
-  TextChange1 textChange1=TextChange1();
+
+  TextChange1 textChange1 = TextChange1();
 
   @override
   Widget build(BuildContext context) {
@@ -103,94 +103,99 @@ class _ProfileScreenState extends State<ProfileScreen> {
     var hgt = MediaQuery.of(context).size.height;
     return SafeArea(
         child: Scaffold(
-          // appBar: AppBar(
-          //   backgroundColor: Color(0xff587080),
-          //   title: Text(
-          //     'Calculator',
-          //     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50),
-          //   ),
-          // ),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  // border: Border.all(color: Colors.black, width: 10),
-                  // borderRadius: BorderRadius.all(Radius.circular(20)),
+      // appBar: AppBar(
+      //   backgroundColor: Color(0xff587080),
+      //   title: Text(
+      //     'Calculator',
+      //     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50),
+      //   ),
+      // ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                // border: Border.all(color: Colors.black, width: 10),
+                // borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
-                margin: EdgeInsets.only(top: 10, right: 15, left: 10),
-                height: hgt/3.5,
-                width: wid,
-                // color: Colors.blue,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Expanded(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Text(
-                          result,
-                          style: TextStyle(fontSize: hgt/15,),
-                        ),
+            margin: EdgeInsets.only(top: 10, right: 15, left: 10),
+            height: hgt / 3.5,
+            width: wid,
+            // color: Colors.blue,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Text(
+                      result,
+                      style: TextStyle(
+                        fontSize: hgt / 15,
                       ),
                     ),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Text(
-                          equation,
-                          style: TextStyle(fontSize: hgt/20,),
-                        ),
-                      ),
-                    ),                  ],
+                  ),
                 ),
-              ),
-              Column(
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Text(
+                      equation,
+                      style: TextStyle(
+                        fontSize: hgt / 20,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Column(
+            children: [
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      customOutLineButton('AC', 0xfff7d36f,hgt),
-                      customOutLineButton('→', 0xfff7d36f,hgt),
-                      customOutLineButton('=', 0xfff7d36f,hgt),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      customOutLineButton('7', 0xff95cad6,hgt),
-                      customOutLineButton('8', 0xff95cad6,hgt),
-                      customOutLineButton('9', 0xff95cad6,hgt),
-                      customOutLineButton('X', 0xfff7d36f,hgt),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      customOutLineButton('4', 0xff95cad6,hgt),
-                      customOutLineButton('5', 0xff95cad6,hgt),
-                      customOutLineButton('6', 0xff95cad6,hgt),
-                      customOutLineButton('-', 0xfff7d36f,hgt),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      customOutLineButton('1', 0xff95cad6,hgt),
-                      customOutLineButton('2', 0xff95cad6,hgt),
-                      customOutLineButton('3', 0xff95cad6,hgt),
-                      customOutLineButton('+', 0xfff7d36f,hgt),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      customOutLineButton('.', 0xff95cad6,hgt),
-                      customOutLineButton('0', 0xff95cad6,hgt),
-                      customOutLineButton('%', 0xfff7d36f,hgt),
-                      customOutLineButton('/', 0xfff7d36f,hgt),
-                    ],
-                  ),
+                  customOutLineButton('AC', 0xfff7d36f, hgt),
+                  customOutLineButton('→', 0xfff7d36f, hgt),
+                  customOutLineButton('=', 0xfff7d36f, hgt),
+                ],
+              ),
+              Row(
+                children: [
+                  customOutLineButton('7', 0xff95cad6, hgt),
+                  customOutLineButton('8', 0xff95cad6, hgt),
+                  customOutLineButton('9', 0xff95cad6, hgt),
+                  customOutLineButton('X', 0xfff7d36f, hgt),
+                ],
+              ),
+              Row(
+                children: [
+                  customOutLineButton('4', 0xff95cad6, hgt),
+                  customOutLineButton('5', 0xff95cad6, hgt),
+                  customOutLineButton('6', 0xff95cad6, hgt),
+                  customOutLineButton('-', 0xfff7d36f, hgt),
+                ],
+              ),
+              Row(
+                children: [
+                  customOutLineButton('1', 0xff95cad6, hgt),
+                  customOutLineButton('2', 0xff95cad6, hgt),
+                  customOutLineButton('3', 0xff95cad6, hgt),
+                  customOutLineButton('+', 0xfff7d36f, hgt),
+                ],
+              ),
+              Row(
+                children: [
+                  customOutLineButton('.', 0xff95cad6, hgt),
+                  customOutLineButton('0', 0xff95cad6, hgt),
+                  customOutLineButton('%', 0xfff7d36f, hgt),
+                  customOutLineButton('/', 0xfff7d36f, hgt),
                 ],
               ),
             ],
           ),
-        ));
+        ],
+      ),
+    ));
   }
 }
