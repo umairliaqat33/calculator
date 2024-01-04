@@ -1,3 +1,6 @@
+import 'package:calculator_responsive/config/size_config.dart';
+import 'package:calculator_responsive/widgets/button_row_widget.dart';
+import 'package:calculator_responsive/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
 import 'textfile.dart';
@@ -6,18 +9,14 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData.dark(),
+      debugShowCheckedModeBanner: false,
       home: ProfileScreen(),
     );
   }
@@ -31,171 +30,211 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  String equation = ' ';
-  String result = " ";
-  String expression = "";
+  String _equation = '0';
+  String _result = "";
+  String _expression = "";
 
   void btnClicked(String value) {
     setState(() {
-      if (value == 'AC') {
-        equation = ' ';
-        result = ' ';
-      } else if (value == '→') {
-        equation = equation.substring(0, equation.length - 1);
-        if (equation == '') {
-          equation = ' ';
-        }
-      } else if (value == '=') {
-        expression = equation;
-        expression = expression.replaceAll('X', '*');
-        try {
-          Parser p = new Parser();
-          Expression exp = p.parse(expression);
-          ContextModel cm = ContextModel();
-          result = '${exp.evaluate(EvaluationType.REAL, cm)}';
-        } catch (e) {
-          result = 'ERROR';
-        }
+      if (_equation == '0') {
+        _equation = value;
       } else {
-        if (equation == '0') {
-          equation = value;
-        } else {
-          equation = equation + value;
-        }
+        _equation = _equation + value;
+      }
+      _expression = _equation;
+      _expression = _expression.replaceAll('X', '*');
+      try {
+        Parser p = new Parser();
+        Expression exp = p.parse(_expression);
+        ContextModel cm = ContextModel();
+        _result = '${exp.evaluate(EvaluationType.INTERVAL, cm)}';
+      } catch (e) {
+        _result = 'ERROR';
       }
     });
-  }
-
-  Widget customOutLineButton(String value, int color, double h) {
-    return Expanded(
-      child: Container(
-        margin: EdgeInsets.all(h / 100),
-        height: h / 10,
-        width: 80,
-        child: TextButton(
-            onPressed: () {
-              btnClicked(value);
-            },
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Color(color)),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              )),
-            ),
-            child: Text(
-              value,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
-            )),
-      ),
-    );
   }
 
   TextChange1 textChange1 = TextChange1();
 
   @override
   Widget build(BuildContext context) {
-    var wid = MediaQuery.of(context).size.width;
-    var hgt = MediaQuery.of(context).size.height;
     return SafeArea(
-        child: Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: Color(0xff587080),
-      //   title: Text(
-      //     'Calculator',
-      //     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50),
-      //   ),
-      // ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-                // border: Border.all(color: Colors.black, width: 10),
-                // borderRadius: BorderRadius.all(Radius.circular(20)),
+      child: Scaffold(
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Flexible(
+              flex: 1,
+              child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.only(
+                  left: SizeConfig.width15(context) + 1,
+                  right: SizeConfig.width15(context) + 1,
+                  bottom: SizeConfig.width15(context) + 1,
                 ),
-            margin: EdgeInsets.only(top: 10, right: 15, left: 10),
-            height: hgt / 3.5,
-            width: wid,
-            // color: Colors.blue,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Text(
-                      result,
-                      style: TextStyle(
-                        fontSize: hgt / 15,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Text(
+                          _equation,
+                          textAlign: TextAlign.end,
+                          style: TextStyle(
+                            fontSize: SizeConfig.height20(context) * 3,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Text(
-                      equation,
-                      style: TextStyle(
-                        fontSize: hgt / 20,
+                    Expanded(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Text(
+                          _result,
+                          style: TextStyle(
+                            fontSize: SizeConfig.height20(context) * 2,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-          Column(
-            children: [
-              Row(
-                children: [
-                  customOutLineButton('AC', 0xfff7d36f, hgt),
-                  customOutLineButton('→', 0xfff7d36f, hgt),
-                  customOutLineButton('=', 0xfff7d36f, hgt),
-                ],
+            Flexible(
+              flex: 0,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: SizeConfig.width15(context) + 1,
+                  right: SizeConfig.width15(context) + 1,
+                  bottom: SizeConfig.width15(context) + 1,
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomButton(
+                          buttonColor: Color(0xfff7d36f),
+                          title: "AC",
+                          onPressed: () => _clearFunction(),
+                        ),
+                        SizedBox(
+                          width: SizeConfig.width5(context),
+                        ),
+                        Expanded(
+                          child: CustomButton(
+                            buttonColor: Color(0xfff7d36f),
+                            title: "=",
+                            onPressed: () => btnClicked("="),
+                          ),
+                        ),
+                        SizedBox(
+                          width: SizeConfig.width5(context),
+                        ),
+                        CustomButton(
+                          buttonColor: Color(0xfff7d36f),
+                          title: "⌫",
+                          onPressed: () => _deleteFuction(),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: SizeConfig.height8(context),
+                    ),
+                    ButtonRowWidget(
+                      button1Clicked: () => btnClicked("7"),
+                      button2Clicked: () => btnClicked("8"),
+                      button3Clicked: () => btnClicked("9"),
+                      button4Clicked: () => btnClicked("X"),
+                      button1Value: "7",
+                      button2Value: "8",
+                      button3Value: "9",
+                      button4Value: "X",
+                      button1Color: Color(0xff95cad6),
+                      button2Color: Color(0xff95cad6),
+                      button3Color: Color(0xff95cad6),
+                      button4Color: Color(0xfff7d36f),
+                    ),
+                    SizedBox(
+                      height: SizeConfig.height8(context),
+                    ),
+                    ButtonRowWidget(
+                      button1Clicked: () => btnClicked("4"),
+                      button2Clicked: () => btnClicked("5"),
+                      button3Clicked: () => btnClicked("6"),
+                      button4Clicked: () => btnClicked("-"),
+                      button1Value: "4",
+                      button2Value: "5",
+                      button3Value: "6",
+                      button4Value: "-",
+                      button1Color: Color(0xff95cad6),
+                      button2Color: Color(0xff95cad6),
+                      button3Color: Color(0xff95cad6),
+                      button4Color: Color(0xfff7d36f),
+                    ),
+                    SizedBox(
+                      height: SizeConfig.height8(context),
+                    ),
+                    ButtonRowWidget(
+                      button1Clicked: () => btnClicked("1"),
+                      button2Clicked: () => btnClicked("2"),
+                      button3Clicked: () => btnClicked("3"),
+                      button4Clicked: () => btnClicked("+"),
+                      button1Value: "1",
+                      button2Value: "2",
+                      button3Value: "3",
+                      button4Value: "+",
+                      button1Color: Color(0xff95cad6),
+                      button2Color: Color(0xff95cad6),
+                      button3Color: Color(0xff95cad6),
+                      button4Color: Color(0xfff7d36f),
+                    ),
+                    SizedBox(
+                      height: SizeConfig.height8(context),
+                    ),
+                    ButtonRowWidget(
+                      button1Clicked: () => btnClicked("."),
+                      button2Clicked: () => btnClicked("0"),
+                      button3Clicked: () => btnClicked("%"),
+                      button4Clicked: () => btnClicked("/"),
+                      button1Value: ".",
+                      button2Value: "0",
+                      button3Value: "%",
+                      button4Value: "/",
+                      button1Color: Color(0xfff7d36f),
+                      button2Color: Color(0xff95cad6),
+                      button3Color: Color(0xfff7d36f),
+                      button4Color: Color(0xfff7d36f),
+                    ),
+                  ],
+                ),
               ),
-              Row(
-                children: [
-                  customOutLineButton('7', 0xff95cad6, hgt),
-                  customOutLineButton('8', 0xff95cad6, hgt),
-                  customOutLineButton('9', 0xff95cad6, hgt),
-                  customOutLineButton('X', 0xfff7d36f, hgt),
-                ],
-              ),
-              Row(
-                children: [
-                  customOutLineButton('4', 0xff95cad6, hgt),
-                  customOutLineButton('5', 0xff95cad6, hgt),
-                  customOutLineButton('6', 0xff95cad6, hgt),
-                  customOutLineButton('-', 0xfff7d36f, hgt),
-                ],
-              ),
-              Row(
-                children: [
-                  customOutLineButton('1', 0xff95cad6, hgt),
-                  customOutLineButton('2', 0xff95cad6, hgt),
-                  customOutLineButton('3', 0xff95cad6, hgt),
-                  customOutLineButton('+', 0xfff7d36f, hgt),
-                ],
-              ),
-              Row(
-                children: [
-                  customOutLineButton('.', 0xff95cad6, hgt),
-                  customOutLineButton('0', 0xff95cad6, hgt),
-                  customOutLineButton('%', 0xfff7d36f, hgt),
-                  customOutLineButton('/', 0xfff7d36f, hgt),
-                ],
-              ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
-    ));
+    );
+  }
+
+  void _clearFunction() {
+    setState(() {
+      _expression = '';
+      _equation = '0';
+      _result = '';
+    });
+  }
+
+  void _deleteFuction() {
+    setState(() {
+      _equation = _equation.substring(0, _equation.length - 1);
+      if (_equation == '') {
+        _expression = '';
+        _equation = '0';
+        _result = '';
+      }
+    });
   }
 }
