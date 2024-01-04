@@ -36,20 +36,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void btnClicked(String value) {
     setState(() {
-      if (_equation == '0') {
-        _equation = value;
+      if (value == '=') {
+        _expression = _equation;
+        _expression = _expression.replaceAll('X', '*');
+        try {
+          Parser p = new Parser();
+          Expression exp = p.parse(_expression);
+          print(exp.simplify());
+          ContextModel cm = ContextModel();
+          _result = '${exp.evaluate(EvaluationType.REAL, cm)}';
+        } catch (e) {
+          _result = 'ERROR';
+        }
       } else {
-        _equation = _equation + value;
-      }
-      _expression = _equation;
-      _expression = _expression.replaceAll('X', '*');
-      try {
-        Parser p = new Parser();
-        Expression exp = p.parse(_expression);
-        ContextModel cm = ContextModel();
-        _result = '${exp.evaluate(EvaluationType.INTERVAL, cm)}';
-      } catch (e) {
-        _result = 'ERROR';
+        if (_equation == '0') {
+          _equation = value;
+        } else {
+          _equation = _equation + value;
+        }
       }
     });
   }
